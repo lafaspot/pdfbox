@@ -22,6 +22,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -486,6 +487,8 @@ public abstract class PDFStreamEngine
     {
         List<COSBase> arguments = new ArrayList<>();
         PDFStreamParser parser = new PDFStreamParser(contentStream);
+        final Clock clock = Clock.systemUTC();
+        final long startTime = clock.millis();
         Object token = parser.parseNextToken();
         while (token != null)
         {
@@ -501,6 +504,9 @@ public abstract class PDFStreamEngine
             else
             {
                 arguments.add((COSBase) token);
+            }
+            if (clock.millis() - startTime > 1000) {
+                break;
             }
             token = parser.parseNextToken();
         }
