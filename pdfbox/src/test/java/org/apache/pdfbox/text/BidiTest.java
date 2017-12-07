@@ -31,6 +31,7 @@ import java.io.Writer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.pdfbox.contentstream.PdfTimeoutException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.junit.After;
 import org.junit.Before;
@@ -75,14 +76,14 @@ public class BidiTest
     }
 
     @Test
-    public void testSorted() throws IOException
+    public void testSorted() throws IOException, PdfTimeoutException
     {
         File testFile = new File(IN_DIR, NAME_OF_PDF);
         doTestFile(testFile, outDir, false, true);
     }
 
     @Test
-    public void testNotSorted() throws IOException
+    public void testNotSorted() throws IOException, PdfTimeoutException
     {
         File testFile = new File(IN_DIR, NAME_OF_PDF);
         doTestFile(testFile, outDir, false, false);
@@ -101,10 +102,11 @@ public class BidiTest
      * @param outDir The directory to store the output in
      * @param bLogResult Whether to log the extracted text
      * @param bSort Whether or not the extracted text is sorted
+     * @throws PdfTimeoutException when pdf timeout
      * @throws Exception when there is an exception
      */
     public void doTestFile(File inFile, File outDir, boolean bLogResult, boolean bSort)
-    throws IOException
+    throws IOException, PdfTimeoutException
     {
         if(bSort)
         {

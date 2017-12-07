@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.pdfbox.contentstream.PdfTimeoutException;
 import org.apache.pdfbox.pdmodel.PDPage;
 
 /**
@@ -126,7 +128,10 @@ public class PDFTextStripperByArea extends PDFTextStripper
         
         if( page.hasContents() )
         {
-            processPage( page );
+            try {
+                processPage( page );
+            } catch (final PdfTimeoutException e) {
+            }
         }
     }
 
