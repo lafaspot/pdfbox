@@ -25,9 +25,9 @@
   </description>
 
 	<parent>
-		<groupId>org.apache.pdfbox</groupId>
+		<groupId>com.github.lafa.pdfbox</groupId>
 		<artifactId>pdfbox-parent</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
+		<version>1.0.0</version>
 		<relativePath>../parent/pom.xml</relativePath>
 	</parent>
 
