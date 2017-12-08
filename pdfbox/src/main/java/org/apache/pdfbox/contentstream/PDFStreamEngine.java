@@ -141,8 +141,9 @@ public abstract class PDFStreamEngine
      *
      * @param page the page to process
      * @throws IOException if there is an error accessing the stream
+     * @throws PdfTimeoutException when parging pdf timeout
      */
-    public void processPage(PDPage page) throws IOException
+    public void processPage(PDPage page) throws IOException, PdfTimeoutException
     {
         initPage(page);
         if (page.hasContents())
@@ -178,8 +179,9 @@ public abstract class PDFStreamEngine
                     "#processChildStream(PDContentStream, PDPage) instead");
         }
         if (form.getCOSObject().getLength() > 0)
-        {
+        try {
             processStream(form);
+        } catch (final PdfTimeoutException e) {
         }
     }
 
@@ -231,8 +233,10 @@ public abstract class PDFStreamEngine
 
         // clip to bounding box
         clipToRect(group.getBBox());
-
-        processStreamOperators(group);
+        try {
+            processStreamOperators(group);
+        } catch (final PdfTimeoutException e) {
+        }
         
         initialMatrix = parentMatrix;
 
@@ -272,8 +276,10 @@ public abstract class PDFStreamEngine
         textMatrix = new Matrix();
         Matrix textLineMatrixOld = textLineMatrix;
         textLineMatrix = new Matrix();
-
-        processStreamOperators(charProc);
+        try {
+            processStreamOperators(charProc);
+        } catch (final PdfTimeoutException e) {
+        }
 
         // restore text matrices
         textMatrix = textMatrixOld;
@@ -329,10 +335,11 @@ public abstract class PDFStreamEngine
 
             // needed for patterns in appearance streams, e.g. PDFBOX-2182
             initialMatrix = aa.clone();
-
-            processStreamOperators(appearance);
+            try {
+                processStreamOperators(appearance);
+            } catch (final PdfTimeoutException e) {
+            }
         }
-        
         restoreGraphicsStack(savedStack);
         popResources(parent);
     }
@@ -394,8 +401,10 @@ public abstract class PDFStreamEngine
 
         // clip to bounding box
         clipToRect(tilingPattern.getBBox());
-
-        processStreamOperators(tilingPattern);
+        try {
+            processStreamOperators(tilingPattern);
+        } catch (final PdfTimeoutException e) {
+        }
 
         initialMatrix = parentMatrix;
         restoreGraphicsStack(savedStack);
@@ -444,7 +453,10 @@ public abstract class PDFStreamEngine
                     " #processPage(PDPage) call #processChildStream(PDContentStream) instead");
         }
         initPage(page);
-        processStream(contentStream);
+        try {
+            processStream(contentStream);
+        } catch (final PdfTimeoutException e) {
+        }
         currentPage = null;
     }
 
@@ -453,8 +465,9 @@ public abstract class PDFStreamEngine
      *
      * @param contentStream the content stream
      * @throws IOException if there is an exception while processing the stream
+     * @throws PdfTimeoutException when parging pdf timeout
      */
-    private void processStream(PDContentStream contentStream) throws IOException
+    private void processStream(PDContentStream contentStream) throws IOException, PdfTimeoutException
     {
         PDResources parent = pushResources(contentStream);
         Stack<PDGraphicsState> savedStack = saveGraphicsStack();
@@ -482,8 +495,9 @@ public abstract class PDFStreamEngine
      *
      * @param contentStream to content stream to parse.
      * @throws IOException if there is an error reading or parsing the content stream.
+     * @throws PdfTimeoutException when parsing pdf timeout
      */
-    private void processStreamOperators(PDContentStream contentStream) throws IOException
+    private void processStreamOperators(PDContentStream contentStream) throws IOException, PdfTimeoutException
     {
         List<COSBase> arguments = new ArrayList<>();
         PDFStreamParser parser = new PDFStreamParser(contentStream);
@@ -505,8 +519,8 @@ public abstract class PDFStreamEngine
             {
                 arguments.add((COSBase) token);
             }
-            if (clock.millis() - startTime > 800) {
-                break;
+            if (clock.millis() - startTime > 1000) {
+                throw new PdfTimeoutException();
             }
             token = parser.parseNextToken();
         }
