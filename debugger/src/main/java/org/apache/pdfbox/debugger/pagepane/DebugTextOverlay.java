@@ -29,6 +29,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.List;
 import org.apache.fontbox.util.BoundingBox;
+import org.apache.pdfbox.contentstream.PdfTimeoutException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
@@ -83,7 +84,10 @@ final class DebugTextOverlay
             setEndPage(pageIndex + 1);
 
             Writer dummy = new OutputStreamWriter(new ByteArrayOutputStream());
-            writeText(document, dummy);
+            try {
+                writeText(document, dummy);
+            } catch (final PdfTimeoutException e) {
+            }
 
             if (DebugTextOverlay.this.showTextStripperBeads)
             {

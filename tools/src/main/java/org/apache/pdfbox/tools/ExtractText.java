@@ -23,6 +23,8 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Map;
+
+import org.apache.pdfbox.contentstream.PdfTimeoutException;
 import org.apache.pdfbox.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
@@ -234,7 +236,10 @@ public final class ExtractText
                 }
                 
                 // Extract text for main document:
-                stripper.writeText( document, output );
+                try {
+                    stripper.writeText( document, output );
+                } catch (final PdfTimeoutException e) {
+                }
                 
                 // ... also for any embedded PDFs:
                 PDDocumentCatalog catalog = document.getDocumentCatalog();
@@ -274,7 +279,8 @@ public final class ExtractText
                                     try 
                                     {
                                         stripper.writeText( subDoc, output );
-                                    } 
+                                    } catch (final PdfTimeoutException e) {
+                                    }
                                     finally 
                                     {
                                         IOUtils.closeQuietly(subDoc);                                       

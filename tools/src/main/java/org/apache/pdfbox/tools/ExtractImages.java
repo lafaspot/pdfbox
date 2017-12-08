@@ -39,6 +39,7 @@ import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceGray;
 import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceRGB;
 import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 import org.apache.pdfbox.contentstream.PDFGraphicsStreamEngine;
+import org.apache.pdfbox.contentstream.PdfTimeoutException;
 import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.graphics.form.PDTransparencyGroup;
 import org.apache.pdfbox.pdmodel.graphics.state.PDSoftMask;
@@ -186,7 +187,10 @@ public final class ExtractImages
         public void run() throws IOException
         {
             PDPage page = getPage();
-            processPage(page);
+            try {
+                processPage(page);
+            } catch (final PdfTimeoutException e) {
+            }
             PDResources res = page.getResources();
             for (COSName name : res.getExtGStateNames())
             {
