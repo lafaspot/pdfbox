@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import org.apache.pdfbox.contentstream.PDFGraphicsStreamEngine;
 import org.apache.pdfbox.contentstream.PDFStreamEngine;
+import org.apache.pdfbox.contentstream.PdfTimeoutException;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -72,7 +73,10 @@ public class CustomGraphicsStreamEngine extends PDFGraphicsStreamEngine
      */
     public void run() throws IOException
     {
-        processPage(getPage());
+        try {
+            processPage(getPage());
+    	    } catch (final PdfTimeoutException e) {
+    	    }
 
         for (PDAnnotation annotation : getPage().getAnnotations())
         {

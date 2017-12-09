@@ -24,6 +24,7 @@ import java.io.Writer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.pdfbox.contentstream.PdfTimeoutException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -92,7 +93,10 @@ public class PDFHighlighter extends PDFTextStripper
                                 " version=2>\n<Highlight>\n");
         textOS = new ByteArrayOutputStream();
         textWriter = new OutputStreamWriter( textOS, ENCODING);
-        writeText(pdDocument, textWriter);
+        try {
+          writeText(pdDocument, textWriter);
+        } catch (final PdfTimeoutException e) {
+        }
         highlighterOutput.write("</Highlight>\n</Body>\n</XML>");
         highlighterOutput.flush();
     }

@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.List;
+
+import org.apache.pdfbox.contentstream.PdfTimeoutException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.TextPosition;
@@ -65,7 +67,10 @@ public class PrintTextLocations extends PDFTextStripper
                 stripper.setEndPage( document.getNumberOfPages() );
 
                 Writer dummy = new OutputStreamWriter(new ByteArrayOutputStream());
-                stripper.writeText(document, dummy);
+                try {
+                    stripper.writeText(document, dummy);
+                } catch (final PdfTimeoutException e) {
+                }
             }
         }
     }
