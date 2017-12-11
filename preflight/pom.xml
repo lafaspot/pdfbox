@@ -9,7 +9,8 @@
 	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
 	OF ANY KIND, either express or implied. See the License for the specific 
 	language governing permissions and limitations under the License. -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>preflight</artifactId>
@@ -29,11 +30,42 @@
 		<version>1.0.0</version>
 		<relativePath>../parent/pom.xml</relativePath>
 	</parent>
-        
-        <!-- enable the Bavaria tests with -Dskip-bavaria=false  -->
-        <properties>
-            <skip-bavaria>true</skip-bavaria>
-        </properties>
+
+	<scm>
+		<developerConnection>scm:git:https://github.com/lafaspot/pdfbox.git</developerConnection>
+		<connection>scm:git:https://github.com/lafaspot/pdfbox.git</connection>
+		<url>https://github.com/lafaspot/pdfbox.git</url>
+		<tag>pdfbox-1.0.0</tag>
+	</scm>
+
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/lafaspot/pdfbox/issues</url>
+	</issueManagement>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
+
+	<!-- enable the Bavaria tests with -Dskip-bavaria=false -->
+	<properties>
+		<skip-bavaria>true</skip-bavaria>
+	</properties>
 
 	<build>
 		<plugins>
@@ -42,7 +74,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<skip>true</skip>
-                                        <argLine>${addmod}</argLine>
+					<argLine>${addmod}</argLine>
 				</configuration>
 				<executions>
 					<execution>
@@ -56,7 +88,7 @@
 							<excludes>
 								<exclude>**/integration/**</exclude>
 							</excludes>
-                                                        <argLine>${addmod}</argLine>
+							<argLine>${addmod}</argLine>
 						</configuration>
 					</execution>
 					<execution>
@@ -67,7 +99,7 @@
 						</goals>
 						<configuration>
 							<skip>${skipITs}</skip>
-                                                        <argLine>${addmod}</argLine>
+							<argLine>${addmod}</argLine>
 							<includes>
 								<include>**/integration/*</include>
 							</includes>
@@ -100,53 +132,54 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.17</version>
+				<version>2.17</version>
 				<configuration>
 					<configLocation>../pdfbox-checkstyle-5.xml</configLocation>
 				</configuration>
 			</plugin>
-            <plugin>
-                <groupId>com.googlecode.maven-download-plugin</groupId>
-                <!-- can't use download-maven-plugin for JDK6, see PDFBOX-3532 -->
-                <artifactId>maven-download-plugin</artifactId>
-                <version>1.1.0</version>
-                <configuration>
-                    <skip>${skipTests}</skip>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>get-isartor</id>
-                        <phase>generate-test-resources</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>https://www.pdfa.org/wp-content/until2016_uploads/2011/08/isartor-pdfa-2008-08-13.zip</url>
-                            <unpack>true</unpack>
-                            <outputDirectory>${project.build.directory}/pdfs</outputDirectory>
-                            <md5>9f129c834bc6f9f8dabad4491c4c10ec</md5>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>get-bavaria</id>
-                        <phase>generate-test-resources</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skip-bavaria}</skip>
-                            <url>http://www.pdflib.com/fileadmin/pdflib/Bavaria/2009-04-03-Bavaria-pdfa.zip</url>
-                            <unpack>true</unpack>
-                            <outputDirectory>${project.build.directory}/pdfs</outputDirectory>
-                            <md5>d8fccb2fea540ab49bef237f3579546b</md5>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+			<plugin>
+				<groupId>com.googlecode.maven-download-plugin</groupId>
+				<!-- can't use download-maven-plugin for JDK6, see PDFBOX-3532 -->
+				<artifactId>maven-download-plugin</artifactId>
+				<version>1.1.0</version>
+				<configuration>
+					<skip>${skipTests}</skip>
+				</configuration>
+				<executions>
+					<execution>
+						<id>get-isartor</id>
+						<phase>generate-test-resources</phase>
+						<goals>
+							<goal>wget</goal>
+						</goals>
+						<configuration>
+							<url>https://www.pdfa.org/wp-content/until2016_uploads/2011/08/isartor-pdfa-2008-08-13.zip</url>
+							<unpack>true</unpack>
+							<outputDirectory>${project.build.directory}/pdfs</outputDirectory>
+							<md5>9f129c834bc6f9f8dabad4491c4c10ec</md5>
+						</configuration>
+					</execution>
+					<execution>
+						<id>get-bavaria</id>
+						<phase>generate-test-resources</phase>
+						<goals>
+							<goal>wget</goal>
+						</goals>
+						<configuration>
+							<skip>${skip-bavaria}</skip>
+							<url>http://www.pdflib.com/fileadmin/pdflib/Bavaria/2009-04-03-Bavaria-pdfa.zip</url>
+							<unpack>true</unpack>
+							<outputDirectory>${project.build.directory}/pdfs</outputDirectory>
+							<md5>d8fccb2fea540ab49bef237f3579546b</md5>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -213,14 +246,13 @@
 			<artifactId>bcprov-jdk15on</artifactId>
 			<optional>true</optional>
 		</dependency>
-                <!-- For legal reasons (incompatible license), this dependency
-                is to be used only in the tests and may not be distributed. 
-                See also LEGAL-195 -->
-                <dependency>
-                    <groupId>com.levigo.jbig2</groupId>
-                    <artifactId>levigo-jbig2-imageio</artifactId>
-                    <scope>test</scope>
-                </dependency>
+		<!-- For legal reasons (incompatible license), this dependency is to be 
+			used only in the tests and may not be distributed. See also LEGAL-195 -->
+		<dependency>
+			<groupId>com.levigo.jbig2</groupId>
+			<artifactId>levigo-jbig2-imageio</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
 
