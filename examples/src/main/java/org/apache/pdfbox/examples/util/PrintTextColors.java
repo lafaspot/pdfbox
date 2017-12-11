@@ -21,6 +21,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+
+import org.apache.pdfbox.contentstream.PdfTimeoutException;
 import org.apache.pdfbox.contentstream.operator.color.SetNonStrokingColor;
 import org.apache.pdfbox.contentstream.operator.color.SetNonStrokingColorN;
 import org.apache.pdfbox.contentstream.operator.color.SetNonStrokingColorSpace;
@@ -95,7 +97,10 @@ public class PrintTextColors extends PDFTextStripper
                 stripper.setEndPage(document.getNumberOfPages());
 
                 Writer dummy = new OutputStreamWriter(new ByteArrayOutputStream());
-                stripper.writeText(document, dummy);
+                try {
+                    stripper.writeText(document, dummy);
+                } catch (final PdfTimeoutException e) {
+                }
             }
         }
     }

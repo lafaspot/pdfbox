@@ -32,6 +32,7 @@ import java.io.Writer;
 import java.util.List;
 import javax.imageio.ImageIO;
 import org.apache.fontbox.util.BoundingBox;
+import org.apache.pdfbox.contentstream.PdfTimeoutException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
@@ -248,7 +249,10 @@ public class DrawPrintTextLocations extends PDFTextStripper
         setEndPage(page + 1);
 
         Writer dummy = new OutputStreamWriter(new ByteArrayOutputStream());
-        writeText(document, dummy);
+        try {
+            writeText(document, dummy);
+        } catch (final PdfTimeoutException e) {
+        }
         
         // beads in green
         g2d.setStroke(new BasicStroke(0.4f));

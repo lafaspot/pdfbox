@@ -35,6 +35,7 @@ import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexOptions;
+import org.apache.pdfbox.contentstream.PdfTimeoutException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
@@ -360,7 +361,10 @@ public class LucenePDFDocument
             {
                 stripper = new PDFTextStripper();
             }
-            stripper.writeText(pdfDocument, writer);
+            try {
+                stripper.writeText(pdfDocument, writer);
+            } catch (final PdfTimeoutException e) {
+            }
 
             // Note: the buffer to string operation is costless;
             // the char array value of the writer buffer and the content string

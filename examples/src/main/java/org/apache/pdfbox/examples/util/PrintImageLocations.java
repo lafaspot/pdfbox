@@ -27,6 +27,7 @@ import org.apache.pdfbox.util.Matrix;
 import org.apache.pdfbox.contentstream.operator.DrawObject;
 import org.apache.pdfbox.contentstream.operator.Operator;
 import org.apache.pdfbox.contentstream.PDFStreamEngine;
+import org.apache.pdfbox.contentstream.PdfTimeoutException;
 
 import java.io.File;
 import java.io.IOException;
@@ -83,7 +84,10 @@ public class PrintImageLocations extends PDFStreamEngine
                 {
                     pageNum++;
                     System.out.println( "Processing page: " + pageNum );
-                    printer.processPage(page);
+                    try {
+                        printer.processPage(page);
+                    } catch (final PdfTimeoutException e) {
+                    }
                 }
             }
         }
