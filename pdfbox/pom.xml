@@ -160,7 +160,7 @@
                     <instructions>
                         <Include-Resource>
                             {maven-resources},
-                            META-INF=target/maven-shared-archive-resources/META-INF,
+                            <!-- META-INF=target/maven-shared-archive-resources/META-INF, -->
                             org/apache/pdfbox/resources=target/classes/org/apache/pdfbox/resources
                         </Include-Resource>
                     </instructions>
