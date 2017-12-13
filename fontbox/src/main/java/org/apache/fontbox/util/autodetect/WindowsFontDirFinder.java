@@ -38,7 +38,7 @@ public class WindowsFontDirFinder implements FontDirFinder
      */
     private String getWinDir(String osName) throws IOException
     {
-        Process process;
+        /*Process process;
         Runtime runtime = Runtime.getRuntime();
         if (osName.startsWith("Windows 9"))
         {
@@ -52,7 +52,8 @@ public class WindowsFontDirFinder implements FontDirFinder
                 process.getInputStream(), Charsets.ISO_8859_1)))
         {
             return bufferedReader.readLine();
-        }
+        }*/
+        return "";
     }
 
     /**
